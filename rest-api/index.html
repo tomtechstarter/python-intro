@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REST API Test</title>
+</head>
+<body>
+    <h1>REST API Test</h1>
+
+    <h2>Get All Data</h2>
+    <button onclick="getAllData()">Get All Data</button>
+    <p id="getAllDataResult"></p>
+
+    <h2>Get Item by ID</h2>
+    <label for="itemId">Item ID:</label>
+    <input type="number" id="itemId" min="1">
+    <button onclick="getItemById()">Get Item</button>
+    <p id="getItemByIdResult"></p>
+
+    <h2>Add New Item</h2>
+    <label for="newItemName">Item Name:</label>
+    <input type="text" id="newItemName">
+    <button onclick="addNewItem()">Add Item</button>
+    <p id="addNewItemResult"></p>
+
+    <h2>Update Item by ID</h2>
+    <label for="updateItemId">Item ID:</label>
+    <input type="number" id="updateItemId" min="1">
+    <label for="updateItemName">New Item Name:</label>
+    <input type="text" id="updateItemName">
+    <button onclick="updateItem()">Update Item</button>
+    <p id="updateItemResult"></p>
+
+    <h2>Delete Item by ID</h2>
+    <label for="deleteItemId">Item ID:</label>
+    <input type="number" id="deleteItemId" min="1">
+    <button onclick="deleteItem()">Delete Item</button>
+    <p id="deleteItemResult"></p>
+
+    <script>
+        function makeRequest(method, url, data, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    callback(xhr.status, xhr.responseText);
+                }
+            };
+            xhr.send(JSON.stringify(data));
+        }
+
+        function getAllData() {
+            makeRequest('GET', 'http://127.0.0.1:5001/api/data', null, function(status, response) {
+                document.getElementById('getAllDataResult').innerHTML = 'Status: ' + status + '<br>' + response;
+            });
+        }
+
+        function getItemById() {
+            var itemId = document.getElementById('itemId').value;
+            makeRequest('GET', 'http://127.0.0.1:5001/api/data/' + itemId, null, function(status, response) {
+                document.getElementById('getItemByIdResult').innerHTML = 'Status: ' + status + '<br>' + response;
+            });
+        }
+
+        function addNewItem() {
+            var newItemName = document.getElementById('newItemName').value;
+            makeRequest('POST', 'http://127.0.0.1:5001/api/data', { 'name': newItemName }, function(status, response) {
+                document.getElementById('addNewItemResult').innerHTML = 'Status: ' + status + '<br>' + response;
+            });
+        }
+
+        function updateItem() {
+            var updateItemId = document.getElementById('updateItemId').value;
+            var updateItemName = document.getElementById('updateItemName').value;
+            makeRequest('PUT', 'http://127.0.0.1:5001/api/data/' + updateItemId, { 'name': updateItemName }, function(status, response) {
+                document.getElementById('updateItemResult').innerHTML = 'Status: ' + status + '<br>' + response;
+            });
+        }
+
+        function deleteItem() {
+            var deleteItemId = document.getElementById('deleteItemId').value;
+            makeRequest('DELETE', 'http://127.0.0.1:5001/api/data/' + deleteItemId, null, function(status, response) {
+                document.getElementById('deleteItemResult').innerHTML = 'Status: ' + status + '<br>' + response;
+            });
+        }
+    </script>
+</body>
+</html>
