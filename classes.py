@@ -13,11 +13,14 @@ class Van(Auto):
     def __init__(self, marke, farbe, model, hat_stehoehe):
         super().__init__( marke, farbe, model )
         self.hat_stehoehe = hat_stehoehe
-
-    def zeige_info(self):
-        print(f"Van Marke: {self.marke}, Farbe: {self.farbe}, Model: {self.model}, hat stehöhe: {self.hat_stehoehe} ")
+    
+    def zeigeHatStehhoehe(self): 
+        print(f"Hat der Van Stehöhe --> {self.hat_stehoehe}")
 
 
 myVan= Van("VW", "rot", "T6", False)
 
 myVan.zeige_info()
+myVan.zeigeHatStehhoehe()
+
+myAuto= Auto("VW", "rot", "T6")
